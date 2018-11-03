@@ -12,7 +12,7 @@ class Fairytalez(MycroftSkill):
     def handle_fairytalez(self, message):
         #self.speak_dialog('fairytalez')
         self.is_reading = True
-        lines = self.get_story() 
+        lines = self.get_story("https://fairytalez.com/the-little-mermaid/") 
         for line in lines:
             if self.is_reading == False:
                 break
@@ -28,21 +28,8 @@ class Fairytalez(MycroftSkill):
             return BeautifulSoup(requests.get(url).text,"html.parser")
         except Exception as SockException:
             print(SockException)
-            #sys.exit(1)
-    
-#    def get_story(self):
-#        url = "https://fairytalez.com/the-little-mermaid/"
-#        #self.url+=type+".html"
-#        #soup = self.get_soup(self.url)
-#        soup = BeautifulSoup(requests.get(url).text,"html.parser")
-#        #/lines = "".join([i.text for i in soup.select("#main > article > section > p")])
-##        section = soup.select("#main > article > section")
-#        lines = section.find_all("p") 
-#        return lines
-    
-    def get_story(self):
-        url = "https://fairytalez.com/the-little-mermaid/"
-        #soup = get_soup(url)
+
+    def get_story(self, url):
         soup = BeautifulSoup(requests.get(url).text,"html.parser")
         # ignore first entry, its just garbage
         # Already a member? Sign in. Or Create a free Fairytalez account in less than a minute.
@@ -52,6 +39,11 @@ class Fairytalez(MycroftSkill):
         #  story so using the index is bad idea, but filtering everything
         # betwene {} should be safe
         lines = [l for l in lines if not l.startswith("{") and not l.endswith("}")]
+        return lines
+
+    def get_index(self, url):
+        soup = BeautifulSoup(requests.get(url).text,"html.parser")
+        lines = [a.text for a in soup.find(id="main").find_all("a")[1:]]
         return lines
 
 def create_skill():
