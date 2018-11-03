@@ -15,7 +15,7 @@ Andreas Lorensen (@andlo)
 
 ## Category
 **Entertainment**
-Music
+
 
 ## Tags
 #stories

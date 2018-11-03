@@ -12,29 +12,55 @@ class Fairytalez(MycroftSkill):
 
     @intent_file_handler('fairytalez.intent')
     def handle_fairytalez(self, message):
+        self.is_reading = True
         response = self.get_response('fairytalez')
         self.speak_dialog('let_me_think', data={"story":response})
         index = self.get_index("https://fairytalez.com/fairy-tales/")
         result = match_one(response, list(index.keys()))
+        
         if result[1] < 0.8:
             self.speak_dialog('that_would_be', data={"story":result[0]})
-        else:
+            response = self.ask_yesno('is_it')
+            if response == False:
+                self.speak_dialog('no_story')
+                self.is_reading = False
+        if self.is_reading == True:
             self.speak_dialog('i_know_that', data={"story":result[0]})
-        self.log.info(result)
-        self.log.info(index.get(result[0]))
-        self.tell_story(index.get(result[0]))
+            self.log.info(result)
+            self.log.info(index.get(result[0]))
+            self.settings['story'] = result[0]  
+            self.settings['bookmark'] = 0  
+            self.tell_story(index.get(result[0]), 0)
 
-    def tell_story(self, url):
+    @intent_file_handler('continue.intent')
+    def handle_continue(self, message):
+        if self.settings.get('story') == None:
+            self.speak_dialog('no_story_to_continue')
+        else:
+            story = self.settings.get('story')
+            self.speak_dialog('continue', data={"story":story})
+            index = self.get_index("https://fairytalez.com/fairy-tales/")
+            self.tell_story(index.get(story), self.settings.get('bookmark'))
+        
+    def tell_story(self, url, bookmark):
         self.is_reading = True
         lines = self.get_story(url) 
-        for line in lines:
+        for line in lines[bookmark:]:
             if self.is_reading == False:
                 break
             self.speak(line, wait=True)
+            bookmark = bookmark+1
+            self.settings['bookmark'] = bookmark  
         self.is_reading = False
-
+        self.settings['story'] = None  
+        self.settings['bookmark'] = None  
+        
     def stop(self):
-        self.is_reading = False
+        #self.is_reading = False
+        if self.is_reading: 
+            self.is_reading = False 
+            return True
+        
 
     #def get_soup(url):
     #    try:
