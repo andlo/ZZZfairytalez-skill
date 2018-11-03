@@ -40,7 +40,7 @@ class Fairytalez(MycroftSkill):
 #        lines = section.find_all("p") 
 #        return lines
     
-    def get_story():
+    def get_story(self):
         url = "https://fairytalez.com/the-little-mermaid/"
         #soup = get_soup(url)
         soup = BeautifulSoup(requests.get(url).text,"html.parser")
