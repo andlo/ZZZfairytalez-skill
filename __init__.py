@@ -43,8 +43,10 @@ class Fairytalez(MycroftSkill):
 
     def get_index(self, url):
         soup = BeautifulSoup(requests.get(url).text,"html.parser")
-        lines = [a.text for a in soup.find(id="main").find_all("a")[1:]]
-        return lines
+        index = []
+        for link in soup.find(id="main").find_all('a'):
+            index.append([link.text[2:], link.get("href")])
+        return index
 
 def create_skill():
     return Fairytalez()
