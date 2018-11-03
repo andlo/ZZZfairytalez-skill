@@ -1,4 +1,4 @@
-# <img src='hca.png' card_color='#40DBB0' width='50' height='50' style='vertical-align:bottom'/> Fairytalez
+# <img src='hcandersen.png' card_color='#40DBB0' width='50' height='50' style='vertical-align:bottom'/> Fairytalez
 Mycroft tells fairytales
 
 ## About 
