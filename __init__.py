@@ -42,22 +42,19 @@ class Fairytalez(MycroftSkill):
     def tell_story(self, url, bookmark):
         self.is_reading = True
         bookmark = bookmark+1
-        self.settings['bookmark'] += 1
+        self.settings['bookmark'] = bookmark
         lines = self.get_story(url) 
         for line in lines[bookmark:]:
             if self.is_reading == False:
-                self.settings.store
                 return
             self.speak(line, wait=True)
+            self.settings['bookmark'] += 1
         self.is_reading = False
-        self.settings.store
         
     def stop(self):
-        #self.is_reading = False
         if self.is_reading: 
             self.is_reading = False 
             return True
-        
 
     #def get_soup(url):
     #    try:
