@@ -4,7 +4,7 @@ from mycroft.util.parse import match_one
 import requests
 from bs4 import BeautifulSoup
 import sys
-
+#test
 
 class Fairytalez(MycroftSkill):
     def __init__(self):
@@ -12,7 +12,6 @@ class Fairytalez(MycroftSkill):
 
     @intent_file_handler('fairytalez.intent')
     def handle_fairytalez(self, message):
-        self.is_reading = True
         response = self.get_response('fairytalez')
         self.speak_dialog('let_me_think', data={"story":response})
         index = self.get_index("https://fairytalez.com/fairy-tales/")
@@ -23,13 +22,12 @@ class Fairytalez(MycroftSkill):
             response = self.ask_yesno('is_it')
             if response == False:
                 self.speak_dialog('no_story')
-                self.is_reading = False
-        if self.is_reading == True:
-            self.speak_dialog('i_know_that', data={"story":result[0]})
-            self.log.info(result)
-            self.log.info(index.get(result[0]))
-            self.settings['story'] = result[0]  
-            self.tell_story(index.get(result[0]), 0)
+                return
+        self.speak_dialog('i_know_that', data={"story":result[0]})
+        self.log.info(result)
+        self.log.info(index.get(result[0]))
+        self.settings['story'] = result[0]  
+        self.tell_story(index.get(result[0]), 0)
 
     @intent_file_handler('continue.intent')
     def handle_continue(self, message):
@@ -43,23 +41,23 @@ class Fairytalez(MycroftSkill):
         
     def tell_story(self, url, bookmark):
         self.is_reading = True
+        bookmark = bookmark+1
+        self.settings['bookmark'] += 1
         lines = self.get_story(url) 
         for line in lines[bookmark:]:
             if self.is_reading == False:
-                break
+                return
             self.speak(line, wait=True)
-            bookmark = bookmark+1
-            self.settings['bookmark'] = bookmark  
+            self.log.info(self.settings['story'])
+            self.log.info(self.settings['bookmark'])
+            self.settings.store
         self.is_reading = False
-        self.settings['story'] = None  
-        self.settings['bookmark'] = None  
+        self.settings.store
         
     def stop(self):
         #self.is_reading = False
         if self.is_reading: 
             self.is_reading = False 
-            
-            
             return True
         
 
