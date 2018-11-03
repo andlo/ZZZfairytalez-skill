@@ -46,11 +46,9 @@ class Fairytalez(MycroftSkill):
         lines = self.get_story(url) 
         for line in lines[bookmark:]:
             if self.is_reading == False:
+                self.settings.store
                 return
             self.speak(line, wait=True)
-            self.log.info(self.settings['story'])
-            self.log.info(self.settings['bookmark'])
-            self.settings.store
         self.is_reading = False
         self.settings.store
         
