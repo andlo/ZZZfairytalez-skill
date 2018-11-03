@@ -29,7 +29,6 @@ class Fairytalez(MycroftSkill):
             self.log.info(result)
             self.log.info(index.get(result[0]))
             self.settings['story'] = result[0]  
-            self.settings['bookmark'] = 0  
             self.tell_story(index.get(result[0]), 0)
 
     @intent_file_handler('continue.intent')
@@ -59,6 +58,8 @@ class Fairytalez(MycroftSkill):
         #self.is_reading = False
         if self.is_reading: 
             self.is_reading = False 
+            
+            
             return True
         
 
