@@ -11,12 +11,14 @@ class Fairytalez(MycroftSkill):
     @intent_file_handler('fairytalez.intent')
     def handle_fairytalez(self, message):
         #self.speak_dialog('fairytalez')
+        self.tell_story("https://fairytalez.com/the-little-mermaid/")
+        
+    def tell_story(self, url):
         self.is_reading = True
-        lines = self.get_story("https://fairytalez.com/the-little-mermaid/") 
+        lines = self.get_story(url) 
         for line in lines:
             if self.is_reading == False:
                 break
-            #wait_while_speaking()
             self.speak(line, wait=True)
         self.is_reading = False
 

@@ -1,18 +1,26 @@
-## Fairytalez
-Mycroft is telling fairytales
+# <img src='hca.png' card_color='#40DBB0' width='50' height='50' style='vertical-align:bottom'/> Fairytalez
+Mycroft tells fairytales
 
-## Description
-This skill lets mycroft tell fairytales. you can stop and continue and choose from lots of good old fairytales.
-
-fairyales are comming from fairytalez.com.
-
-## Examples
- - "Tell me a story"
- - "Read me a story"
- - "Tell a fairytale"
+## About 
+This skill enables Mycroft to tell lots of fairytales. So make a cup of coco, and sit back and enjoy listning to the good tales.
+Content is from fairytalez.com, so please go visit there if you like the stories.
 
 
-## Credits
+## Examples 
+* "Tell a fairytale"
+* "Tell a good fairytale"
+
+## Credits 
 Andreas Lorensen (@andlo)
 
+## Category
+**Entertainment**
+Music
 
+## Tags
+#stories
+#story
+#tales
+#fairy
+#fairytale
+#fairytales
