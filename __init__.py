@@ -23,7 +23,7 @@ class Fairytalez(MycroftSkill):
                 self.speak_dialog('no_story')
                 return
         self.speak_dialog('i_know_that', data={"story":result[0]})
-        self.log.info(result + " " index.get(result[0]))
+        #self.log.info(result + " " + result[0])
         self.settings['story'] = result[0]  
         self.tell_story(index.get(result[0]), 0)
 
@@ -39,7 +39,6 @@ class Fairytalez(MycroftSkill):
         
     def tell_story(self, url, bookmark):
         self.is_reading = True
-        bookmark = bookmark+1
         self.settings['bookmark'] = bookmark
         lines = self.get_story(url) 
         for line in lines[bookmark:]:
@@ -48,26 +47,28 @@ class Fairytalez(MycroftSkill):
             self.speak(line, wait=True)
             self.settings['bookmark'] += 1
         self.is_reading = False
+        self.settings['bookmark'] = 0
+        self.settings['story'] = None
         
     def stop(self):
         if self.is_reading: 
             self.is_reading = False 
             return True
 
-    #def get_soup(url):
-    #    try:
-    #        return BeautifulSoup(requests.get(url).text,"html.parser")
-    #    except Exception as SockException:
-    #        print(SockException)
+    def get_soup(self, url):
+        try:
+            return BeautifulSoup(requests.get(url).text,"html.parser")
+        except Exception as SockException:
+            self.log.error(SockException)
 
     def get_story(self, url):
-        soup = BeautifulSoup(requests.get(url).text,"html.parser")
+        soup = self.get_soup(url)
         lines = [a.text.strip() for a in soup.find(id="main").find_all("p")[1:]]
         lines = [l for l in lines if not l.startswith("{") and not l.endswith("}")]
         return lines
 
     def get_index(self, url):
-        soup = BeautifulSoup(requests.get(url).text,"html.parser")
+        soup = self.get_soup(url)
         index = {}
         for link in soup.find(id="main").find_all('a'):
             index.update({link.text[2:] : link.get("href")})
