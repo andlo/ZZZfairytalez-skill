@@ -4,7 +4,6 @@ from mycroft.util.parse import match_one
 import requests
 from bs4 import BeautifulSoup
 import sys
-#test
 
 class Fairytalez(MycroftSkill):
     def __init__(self):
@@ -24,8 +23,7 @@ class Fairytalez(MycroftSkill):
                 self.speak_dialog('no_story')
                 return
         self.speak_dialog('i_know_that', data={"story":result[0]})
-        self.log.info(result)
-        self.log.info(index.get(result[0]))
+        self.log.info(result + " " index.get(result[0]))
         self.settings['story'] = result[0]  
         self.tell_story(index.get(result[0]), 0)
 
