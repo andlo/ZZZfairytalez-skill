@@ -1,4 +1,4 @@
-# <img src='hcandersen.png' card_color='#40DBB0' width='50' height='50' style='vertical-align:bottom'/> Fairytalez
+# <img src='story-512.png' card_color='#40DBB0' width='50' height='50' style='vertical-align:bottom'/> Fairytalez
 Mycroft tells fairytales
 
 ## About 
@@ -16,8 +16,7 @@ http://www.fairytalez.com
 * "Continue story"
 
 ## Credits 
-Andreas Lorensen (@andlo)
-The super comunity around Mycroft
+Andreas Lorensen (@andlo) and the super comunity around Mycroft
 
 ## Category
 **Entertainment**
