@@ -1,6 +1,5 @@
 from mycroft import MycroftSkill, intent_file_handler
 from mycroft.util.parse import match_one
-
 import requests
 from bs4 import BeautifulSoup
 
@@ -8,6 +7,9 @@ from bs4 import BeautifulSoup
 class Fairytalez(MycroftSkill):
     def __init__(self):
         MycroftSkill.__init__(self)
+
+    def initialize(self):
+        self.is_reading = False
 
     @intent_file_handler('fairytalez.intent')
     def handle_fairytalez(self, message):
@@ -51,7 +53,7 @@ class Fairytalez(MycroftSkill):
         self.settings['story'] = None
 
     def stop(self):
-        if self.is_reading:
+        if self.is_reading is True:
             self.is_reading = False
             return True
 
