@@ -32,7 +32,10 @@ class Fairytalez(MycroftSkill):
 
     @intent_file_handler('fairytalez.intent')
     def handle_fairytalez(self, message):
-        response = self.get_response('fairytalez')
+        if message.data.get("tale") is None:
+            response = self.get_response('fairytalez')
+        else:
+            response = message.data.get("tale")
         self.speak_dialog('let_me_think', data={"story": response})
         index = self.get_index("https://fairytalez.com/fairy-tales/")
         result = match_one(response, list(index.keys()))
