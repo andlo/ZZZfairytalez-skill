@@ -1,5 +1,5 @@
 # <img src='story-512.png' card_color='#40DBB0' width='50' height='50' style='vertical-align:bottom'/> Fairytalez
-Mycroft tells fairytales
+Mycroft tells fairy tales.
 
 ## About
 This skill enables Mycroft to tell lots of fairytales. So make a cup of coco, and sit back and enjoy listning to the good tales.
@@ -11,12 +11,11 @@ http://www.fairytalez.com
 
 
 ## Examples
-* "Tell a fairytale"
-* "Tell a good fairytale"
+* "Tell a fairy tale"
+* "Tell me the story The Little Match Girl"
 * "Continue story"
 
-Then when asked for whch fairytale, say the fairy tale taht you like most. Or try one of my
-favorites "The Little Match Girl"
+Mycroft will then try to find the fairy tale if you told wich one you wanted. If not, he will ask you.
 
 ## Credits
 Andreas Lorensen (@andlo) and the super comunity around Mycroft
