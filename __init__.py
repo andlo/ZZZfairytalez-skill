@@ -83,10 +83,12 @@ class Fairytalez(MycroftSkill):
         self.speak_dialog('from_fairytalez')
 
     def stop(self):
-        #if self.is_reading is True:
-        #    self.is_reading = False
-        #    return True
-        self.is_reading = False
+        if self.is_reading is True:
+            self.is_reading = False
+            self.stop_speaking()
+            return True
+        else:
+            return False
 
     def get_soup(self, url):
         try:
