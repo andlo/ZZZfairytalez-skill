@@ -43,7 +43,7 @@ class Fairytalez(MycroftSkill):
         if result[1] < 0.8:
             self.speak_dialog('that_would_be', data={"story": result[0]})
             response = self.ask_yesno('is_it_that')
-            if not response:
+            if not response or response is 'no':
                 self.speak_dialog('no_story')
                 return
         self.speak_dialog('i_know_that', data={"story": result[0]})
@@ -72,7 +72,7 @@ class Fairytalez(MycroftSkill):
         lines = self.get_story(url)
         for line in lines[bookmark:]:
             if not self.is_reading:
-                return
+                break
             self.speak(line, wait=True)
             self.settings['bookmark'] += 1
             time.sleep(1)
@@ -83,9 +83,10 @@ class Fairytalez(MycroftSkill):
         self.speak_dialog('from_fairytalez')
 
     def stop(self):
-        if self.is_reading is True:
-            self.is_reading = False
-            return True
+        #if self.is_reading is True:
+        #    self.is_reading = False
+        #    return True
+        self.is_reading = False
 
     def get_soup(self, url):
         try:
