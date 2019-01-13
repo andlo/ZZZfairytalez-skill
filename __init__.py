@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from mycroft import MycroftSkill, intent_file_handler
 from mycroft.util.parse import match_one
 # from mycroft.util import stop_speaking
-# from mycroft.audio import wait_while_speaking, stop_speaking
+from mycroft.audio import wait_while_speaking, stop_speaking
 import requests
 from bs4 import BeautifulSoup
 import time
@@ -79,11 +79,12 @@ class Fairytalez(MycroftSkill):
         for line in lines[bookmark:]:
             if self.is_reading is False:
                 break
-            sentenses = line.split('.')
+            sentenses = line.split('. ')
             for sentens in sentenses:
                 if self.is_reading is False:
                     break
                 else:
+                    wait_while_speaking()
                     self.speak(sentens, wait=True)
                     self.settings['bookmark'] += 1
                     time.sleep(1)
