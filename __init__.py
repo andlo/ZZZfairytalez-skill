@@ -77,6 +77,7 @@ class Fairytalez(MycroftSkill):
             time.sleep(1)
         lines = self.get_story(url)
         for line in lines[bookmark:]:
+            self.settings['bookmark'] += 1
             time.sleep(1)
             if self.is_reading is False:
                 break
@@ -87,7 +88,6 @@ class Fairytalez(MycroftSkill):
                 else:
                     wait_while_speaking()
                     self.speak(sentens, wait=True)
-                    self.settings['bookmark'] += 1
         if self.is_reading is True:
             self.is_reading = False
             self.settings['bookmark'] = 0
