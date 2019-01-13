@@ -18,8 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mycroft import MycroftSkill, intent_file_handler
 from mycroft.util.parse import match_one
-#from mycroft.util import stop_speaking
-from mycroft.audio import wait_while_speaking, stop_speaking
+from mycroft.audio import wait_while_speaking
 import requests
 from bs4 import BeautifulSoup
 import time
@@ -62,40 +61,44 @@ class Fairytalez(MycroftSkill):
             story = self.settings.get('story')
             self.speak_dialog('continue', data={"story": story})
             index = self.get_index("https://fairytalez.com/fairy-tales/")
-            self.tell_story(index.get(story), self.settings.get('bookmark'))
+            self.tell_story(index.get(story), self.settings.get('bookmark') - 1)
 
     @intent_file_handler('stop.intent')
     def handle_stop(self, message):
-        stop_speaking()
-        is_reading = False
+        self.is_reading = False
 
     def tell_story(self, url, bookmark):
         self.is_reading = True
         self.settings['bookmark'] = bookmark
-        title = self.get_title(url)
-        author = self.get_author(url)
-        self.speak_dialog('title_by_author', data={'title': title, 'author': author})
-        time.sleep(2)
+        if bookmark is 0:
+            title = self.get_title(url)
+            author = self.get_author(url)
+            self.speak_dialog('title_by_author', data={'title': title, 'author': author})
+            time.sleep(1)
         lines = self.get_story(url)
         for line in lines[bookmark:]:
+            time.sleep(1)
             if self.is_reading is False:
-                return
-            else:
-                self.speak(line, wait=True)
-                wait_while_speaking()
-                self.settings['bookmark'] += 1
-                time.sleep(1)
-        self.is_reading = False
-        self.settings['bookmark'] = 0
-        self.settings['story'] = None
-        time.sleep(5)
-        self.speak_dialog('from_fairytalez')
+                break
+            sentenses = line.split('. ')
+            for sentens in sentenses:
+                if self.is_reading is False:
+                    break
+                else:
+                    wait_while_speaking()
+                    self.speak(sentens, wait=True)
+                    self.settings['bookmark'] += 1
+        if self.is_reading is True:
+            self.is_reading = False
+            self.settings['bookmark'] = 0
+            self.settings['story'] = None
+            time.sleep(2)
+            self.speak_dialog('from_fairytalez')
 
     def stop(self):
         self.log.info('stop is called')
         if self.is_reading is True:
             self.is_reading = False
-            stop_speaking()
             return True
         else:
             return False
