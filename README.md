@@ -9,6 +9,9 @@ Fairytalez.com is the world's largest collection of fairy tales, fables and folk
 http://www.fairytalez.com
 
 
+_“If you want your children to be intelligent, read them fairy tales. If you want them to be more
+intelligent, read them more fairy tales.”
+Albert Einstein_
 
 ## Examples
 * "Tell a fairy tale"
