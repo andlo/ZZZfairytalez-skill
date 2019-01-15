@@ -78,7 +78,7 @@ class Fairytalez(MycroftSkill):
         lines = self.get_story(url)
         for line in lines[bookmark:]:
             self.settings['bookmark'] += 1
-            time.sleep(1)
+            time.sleep(.5)
             if self.is_reading is False:
                 break
             sentenses = line.split('. ')
