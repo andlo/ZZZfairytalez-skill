@@ -34,7 +34,9 @@ class Fairytalez(MycroftSkill):
     @intent_file_handler('fairytalez.intent')
     def handle_fairytalez(self, message):
         if message.data.get("tale") is None:
-            response = self.get_response('fairytalez')
+            response = self.get_response('fairytalez', num_retries=0)
+            if response is None:
+                return
         else:
             response = message.data.get("tale")
         self.speak_dialog('let_me_think', data={"story": response})
