@@ -63,10 +63,6 @@ class Fairytalez(MycroftSkill):
             index = self.get_index("https://fairytalez.com/fairy-tales/")
             self.tell_story(index.get(story), self.settings.get('bookmark') - 1)
 
-    @intent_file_handler('stop.intent')
-    def handle_stop(self, message):
-        self.is_reading = False
-
     def tell_story(self, url, bookmark):
         self.is_reading = True
         self.settings['bookmark'] = bookmark
