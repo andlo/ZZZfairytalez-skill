@@ -1,0 +1,8 @@
+{
+    "expected_dialog": "let_me_think",
+    "intent": {
+        "tale": "Aladin and the wonderfull lamp"
+    },
+    "intent_type": "fairytalez.intent",
+    "utterance": "Tell me the story Aladin and the wonderfull lamp"
+}

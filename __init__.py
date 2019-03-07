@@ -46,7 +46,7 @@ class Fairytalez(MycroftSkill):
         if result[1] < 0.8:
             self.speak_dialog('that_would_be', data={"story": result[0]})
             response = self.ask_yesno('is_it_that')
-            if not response or response is 'no':
+            if response != 'yes':
                 self.speak_dialog('no_story')
                 return
         self.speak_dialog('i_know_that', data={"story": result[0]})
@@ -68,7 +68,7 @@ class Fairytalez(MycroftSkill):
     def tell_story(self, url, bookmark):
         self.is_reading = True
         self.settings['bookmark'] = bookmark
-        if bookmark is 0:
+        if bookmark == 0:
             title = self.get_title(url)
             author = self.get_author(url)
             self.speak_dialog('title_by_author', data={'title': title, 'author': author})
