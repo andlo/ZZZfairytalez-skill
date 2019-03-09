@@ -1,0 +1,5 @@
+{
+    "expected_dialog": "no_story_to_continue",
+    "intent_type": "continue.intent",
+    "utterance": "Continue story"
+}
