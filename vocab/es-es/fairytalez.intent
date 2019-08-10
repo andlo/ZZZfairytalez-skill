@@ -1,4 +1,2 @@
-Cuenta(me) un (buen) cuento
-(Lee|Léeme) un (buen) cuento
-Cuenta(me) un (buen) cuento de hadas
-(Lee|Léeme) un (buen) cuento de hadas 
+(Cuénta|Lee) (me|) (un buen cuento|una buena historia)
+(Cuenta|Lee) (me|) el cuento de {tale}
