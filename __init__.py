@@ -16,22 +16,23 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from mycroft import MycroftSkill, intent_file_handler
-from mycroft.util.parse import match_one
-from mycroft.audio import wait_while_speaking
-import requests
-from bs4 import BeautifulSoup
 import time
 
+import requests
+from bs4 import BeautifulSoup
+from ovos_utils.parse import match_one
+from ovos_workshop.decorators import intent_handler
+from ovos_workshop.skills import OVOSSkill
+from quebra_frases import sentence_tokenize
 
-class Fairytalez(MycroftSkill):
-    def __init__(self):
-        MycroftSkill.__init__(self)
 
-    def initialize(self):
+class Fairytalez(OVOSSkill):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.is_reading = False
 
-    @intent_file_handler('fairytalez.intent')
+    @intent_handler('fairytalez.intent')
     def handle_fairytalez(self, message):
         if message.data.get("tale") is None:
             response = self.get_response('fairytalez', num_retries=0)
@@ -44,26 +45,26 @@ class Fairytalez(MycroftSkill):
         result = match_one(response, list(index.keys()))
 
         if result[1] < 0.8:
-            self.speak_dialog('that_would_be', data={"story": result[0]})
+            self.speak_dialog('that_would_be', data={"story": result[0]}, wait=True)
             response = self.ask_yesno('is_it_that')
             if response != 'yes':
                 self.speak_dialog('no_story')
                 return
-        self.speak_dialog('i_know_that', data={"story": result[0]})
+        self.speak_dialog('i_know_that', data={"story": result[0]}, wait=True)
         # self.log.info(result + " " + result[0])
         self.settings['story'] = result[0]
-        time.sleep(3)
         self.tell_story(index.get(result[0]), 0)
 
-    @intent_file_handler('continue.intent')
+    @intent_handler('continue.intent')
     def handle_continue(self, message):
         if self.settings.get('story') is None:
             self.speak_dialog('no_story_to_continue')
         else:
             story = self.settings.get('story')
-            self.speak_dialog('continue', data={"story": story})
+            self.speak_dialog('continue', data={"story": story}, wait=True)
             index = self.get_index("https://fairytalez.com/fairy-tales/")
-            self.tell_story(index.get(story), self.settings.get('bookmark') - 1)
+            self.tell_story(index.get(story),
+                            self.settings.get('bookmark') - 1)
 
     def tell_story(self, url, bookmark):
         self.is_reading = True
@@ -71,20 +72,21 @@ class Fairytalez(MycroftSkill):
         if bookmark == 0:
             title = self.get_title(url)
             author = self.get_author(url)
-            self.speak_dialog('title_by_author', data={'title': title, 'author': author})
-            time.sleep(1)
+            self.speak_dialog('title_by_author',
+                              data={
+                                  'title': title,
+                                  'author': author
+                              }, wait=True)
         lines = self.get_story(url)
         for line in lines[bookmark:]:
             self.settings['bookmark'] += 1
-            time.sleep(.5)
             if self.is_reading is False:
                 break
-            sentenses = line.split('. ')
-            for sentens in sentenses:
+
+            for sentens in sentence_tokenize(line):
                 if self.is_reading is False:
                     break
                 else:
-                    wait_while_speaking()
                     self.speak(sentens, wait=True)
         if self.is_reading is True:
             self.is_reading = False
@@ -109,8 +111,12 @@ class Fairytalez(MycroftSkill):
 
     def get_story(self, url):
         soup = self.get_soup(url)
-        lines = [a.text.strip() for a in soup.find(id="main").find_all("p")[1:]]
-        lines = [l for l in lines if not l.startswith("{") and not l.endswith("}")]
+        lines = [
+            a.text.strip() for a in soup.find(id="main").find_all("p")[1:]
+        ]
+        lines = [
+            l for l in lines if not l.startswith("{") and not l.endswith("}")
+        ]
         return lines
 
     def get_title(self, url):
@@ -120,7 +126,10 @@ class Fairytalez(MycroftSkill):
 
     def get_author(self, url):
         soup = self.get_soup(url)
-        author = [a.text.strip() for a in soup.findAll("div", {"class": "author-name"})][0]
+        author = [
+            a.text.strip()
+            for a in soup.findAll("div", {"class": "author-name"})
+        ][0]
         return str(author).split("  ")[0]
 
     def get_index(self, url):
@@ -129,7 +138,3 @@ class Fairytalez(MycroftSkill):
         for link in soup.find(id="main").find_all('a'):
             index.update({link.text[2:]: link.get("href")})
         return index
-
-
-def create_skill():
-    return Fairytalez()
